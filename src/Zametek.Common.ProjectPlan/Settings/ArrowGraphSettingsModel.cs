@@ -6,5 +6,7 @@
         public List<ActivitySeverityModel> ActivitySeverities { get; init; } = [];
 
         public List<EdgeTypeFormatModel> EdgeTypeFormats { get; init; } = [];
+
+        public Boolean DisplayTaskName { get; init; } = false;
     }
 }

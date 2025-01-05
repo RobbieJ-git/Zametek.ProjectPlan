@@ -231,6 +231,9 @@
   <data name="Label_Duration" xml:space="preserve">
     <value>Duration</value>
   </data>
+  <data name="Label_DisplayTaskName" xml:space="preserve">
+    <value>Task Name</value>
+  </data>
   <data name="Label_DurationManMonths" xml:space="preserve">
     <value>Duration (months):</value>
   </data>

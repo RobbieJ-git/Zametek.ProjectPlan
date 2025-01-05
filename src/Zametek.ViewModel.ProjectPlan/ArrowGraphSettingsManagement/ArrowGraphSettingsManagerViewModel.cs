@@ -54,6 +54,10 @@ namespace Zametek.ViewModel.ProjectPlan
             AddManagedActivitySeverityCommand = ReactiveCommand.CreateFromTask(AddManagedActivitySeverityAsync);
             RemoveManagedActivitySeveritiesCommand = ReactiveCommand.CreateFromTask(RemoveManagedActivitySeveritiesAsync, this.WhenAnyValue(rm => rm.HasActivitySeverities));
 
+            m_IsDisplayTaskName = this
+                .WhenAnyValue(rm => rm.m_CoreViewModel.IsBusy)
+                .ToProperty(this, rm => rm.DisplayTaskName);
+            
             m_IsBusy = this
                 .WhenAnyValue(rm => rm.m_CoreViewModel.IsBusy)
                 .ToProperty(this, rm => rm.IsBusy);
@@ -99,6 +103,9 @@ namespace Zametek.ViewModel.ProjectPlan
         #region Properties
 
         public IDictionary<Guid, IManagedActivitySeverityViewModel> SelectedActivitySeverities { get; }
+        
+        private readonly ObservableAsPropertyHelper<bool> m_IsDisplayTaskName;
+        public bool DisplayTaskName => m_IsDisplayTaskName.Value;
 
         #endregion
 

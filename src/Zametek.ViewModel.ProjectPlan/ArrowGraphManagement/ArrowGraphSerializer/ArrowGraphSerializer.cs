@@ -85,7 +85,8 @@ namespace Zametek.ViewModel.ProjectPlan
 
         }
 
-        private static (bool isVisible, string labelText) BuildSingleLineEdgeLabel(ActivityModel activityModel)
+        private static (bool isVisible, string labelText) BuildSingleLineEdgeLabel(ActivityModel activityModel,
+            ArrowGraphSettingsModel arrowGraphSettingsModel)
         {
             ArgumentNullException.ThrowIfNull(activityModel);
             var labelText = new StringBuilder();
@@ -96,6 +97,10 @@ namespace Zametek.ViewModel.ProjectPlan
                 if (!activityModel.CanBeRemoved)
                 {
                     labelText.Append(@$"{activityModel.Id}");
+                    if (arrowGraphSettingsModel.DisplayTaskName)
+                    {
+                        labelText.Append(@$" {activityModel.Name}");
+                    }
                     if (!activityModel.IsCritical())
                     {
                         labelText.Append(@$" [{activityModel.FreeSlack}|{activityModel.TotalSlack}]");
@@ -113,7 +118,7 @@ namespace Zametek.ViewModel.ProjectPlan
             }
             else
             {
-                labelText.Append(@$"{activityModel.Id}({activityModel.Duration})");
+                labelText.Append(@$"{activityModel.Id} {activityModel.Name}({activityModel.Duration})");
                 if (!activityModel.IsCritical())
                 {
                     labelText.Append(@$" [{activityModel.FreeSlack}|{activityModel.TotalSlack}]");
@@ -123,7 +128,8 @@ namespace Zametek.ViewModel.ProjectPlan
             return (isVisible, labelText.ToString());
         }
 
-        private static (bool isVisible, string labelText) BuildMultiLineEdgeLabel(ActivityModel activityModel)
+        private static (bool isVisible, string labelText) BuildMultiLineEdgeLabel(ActivityModel activityModel,
+            ArrowGraphSettingsModel arrowGraphSettingsModel)
         {
             ArgumentNullException.ThrowIfNull(activityModel);
             var labelText = new StringBuilder();
@@ -134,6 +140,8 @@ namespace Zametek.ViewModel.ProjectPlan
                 if (!activityModel.CanBeRemoved)
                 {
                     labelText.AppendFormat($@"{activityModel.Id}");
+                    
+                    labelText.AppendFormat($@"{activityModel.Name}");
                     if (!activityModel.IsCritical())
                     {
                         labelText.AppendLine();
@@ -152,7 +160,7 @@ namespace Zametek.ViewModel.ProjectPlan
             }
             else
             {
-                labelText.AppendFormat($@"{activityModel.Id} ({activityModel.Duration})");
+                labelText.AppendFormat($@"{activityModel.Id} {activityModel.Id} ({activityModel.Duration})");
                 if (!activityModel.IsCritical())
                 {
                     labelText.AppendLine();
@@ -246,11 +254,11 @@ namespace Zametek.ViewModel.ProjectPlan
 
                 if (multiLineEdgeLabels)
                 {
-                    (showLabel, labelText) = BuildMultiLineEdgeLabel(activityModel);
+                    (showLabel, labelText) = BuildMultiLineEdgeLabel(activityModel, arrowGraphSettingsModel);
                 }
                 else
                 {
-                    (showLabel, labelText) = BuildSingleLineEdgeLabel(activityModel);
+                    (showLabel, labelText) = BuildSingleLineEdgeLabel(activityModel, arrowGraphSettingsModel);
                 }
 
                 // Source == tail
